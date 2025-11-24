@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenApi() {
+    OpenAPI customOpenApi() {
         return new OpenAPI()
                 .info(new Info()
                         .title("FDA Rule Engine API")

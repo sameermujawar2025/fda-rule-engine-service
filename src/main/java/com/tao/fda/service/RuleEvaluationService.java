@@ -1,5 +1,10 @@
 package com.tao.fda.service;
 
-public class RuleEvaluationService {
+import com.tao.fda.model.RuleEvaluationRequest;
+import com.tao.fda.model.RuleEvaluationResponse;
+
+public interface RuleEvaluationService {
+
+	RuleEvaluationResponse evaluate(RuleEvaluationRequest request);
 
 }
