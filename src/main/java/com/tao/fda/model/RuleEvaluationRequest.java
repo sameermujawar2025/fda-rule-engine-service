@@ -1,10 +1,14 @@
 package com.tao.fda.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RuleEvaluationRequest {
 
+	private String clientId;
+	
+	@JsonProperty("transaction_id")
 	private String transactionId;
-	private String userId;
-	private String cardNumber;
+	
 	private FraudFeaturesDto features;
 
 	public String getTransactionId() {
@@ -15,28 +19,20 @@ public class RuleEvaluationRequest {
 		this.transactionId = transactionId;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getCardNumber() {
-		return cardNumber;
-	}
-
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
-	}
-
 	public FraudFeaturesDto getFeatures() {
 		return features;
 	}
 
 	public void setFeatures(FraudFeaturesDto features) {
 		this.features = features;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
 	}
 
 }

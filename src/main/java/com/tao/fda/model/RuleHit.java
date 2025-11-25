@@ -2,27 +2,27 @@ package com.tao.fda.model;
 
 public class RuleHit {
 
-	private RiskRuleId ruleId;
-	private String ruleName;
-	private int riskPoints;
-	private String reason;
+	private String ruleCode; // from DB
+	private String ruleName; // from DB
+	private int riskPoints; // from configJson
+	private String reason; // explanation
 
 	public RuleHit() {
 	}
 
-	public RuleHit(RiskRuleId ruleId, String ruleName, int riskPoints, String reason) {
-		this.ruleId = ruleId;
+	public RuleHit(String ruleCode, String ruleName, int riskPoints, String reason) {
+		this.ruleCode = ruleCode;
 		this.ruleName = ruleName;
 		this.riskPoints = riskPoints;
 		this.reason = reason;
 	}
 
-	public RiskRuleId getRuleId() {
-		return ruleId;
+	public String getRuleCode() {
+		return ruleCode;
 	}
 
-	public void setRuleId(RiskRuleId ruleId) {
-		this.ruleId = ruleId;
+	public void setRuleCode(String ruleCode) {
+		this.ruleCode = ruleCode;
 	}
 
 	public String getRuleName() {

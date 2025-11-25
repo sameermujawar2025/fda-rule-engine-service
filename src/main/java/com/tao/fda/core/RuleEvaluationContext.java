@@ -5,16 +5,22 @@ import com.tao.fda.model.RuleEvaluationRequest;
 
 public class RuleEvaluationContext {
 
-	private final RuleEvaluationRequest request;
+	private final String clientId;
+	private final String transactionId;
 	private final FraudFeaturesDto features;
 
-	public RuleEvaluationContext(RuleEvaluationRequest request) {
-		this.request = request;
-		this.features = request.getFeatures();
+	public RuleEvaluationContext(String clientId, String transactionId, FraudFeaturesDto features) {
+		this.clientId = clientId;
+		this.transactionId = transactionId;
+		this.features = features;
 	}
 
-	public RuleEvaluationRequest getRequest() {
-		return request;
+	public String getClientId() {
+		return clientId;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
 	}
 
 	public FraudFeaturesDto getFeatures() {

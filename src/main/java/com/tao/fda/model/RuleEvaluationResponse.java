@@ -4,17 +4,47 @@ import java.util.List;
 
 public class RuleEvaluationResponse {
 
+	private String clientId;
+	private String transactionId;
+	private int totalScore;
 	private Decision decision;
-	private int totalRiskScore;
-	private List<RuleHit> ruleHits;
+	private List<RuleHit> hits;
 
 	public RuleEvaluationResponse() {
 	}
 
-	public RuleEvaluationResponse(Decision decision, int totalRiskScore, List<RuleHit> ruleHits) {
+	public RuleEvaluationResponse(String clientId, String transactionId, int totalScore, Decision decision,
+			List<RuleHit> hits) {
+		super();
+		this.clientId = clientId;
+		this.transactionId = transactionId;
+		this.totalScore = totalScore;
 		this.decision = decision;
-		this.totalRiskScore = totalRiskScore;
-		this.ruleHits = ruleHits;
+		this.hits = hits;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public int getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(int totalScore) {
+		this.totalScore = totalScore;
 	}
 
 	public Decision getDecision() {
@@ -25,19 +55,12 @@ public class RuleEvaluationResponse {
 		this.decision = decision;
 	}
 
-	public int getTotalRiskScore() {
-		return totalRiskScore;
+	public List<RuleHit> getHits() {
+		return hits;
 	}
 
-	public void setTotalRiskScore(int totalRiskScore) {
-		this.totalRiskScore = totalRiskScore;
+	public void setHits(List<RuleHit> hits) {
+		this.hits = hits;
 	}
 
-	public List<RuleHit> getRuleHits() {
-		return ruleHits;
-	}
-
-	public void setRuleHits(List<RuleHit> ruleHits) {
-		this.ruleHits = ruleHits;
-	}
 }

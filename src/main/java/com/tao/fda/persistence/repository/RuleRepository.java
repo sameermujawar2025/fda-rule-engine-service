@@ -7,5 +7,10 @@ import com.tao.fda.persistence.entity.RuleEntity;
 public interface RuleRepository extends JpaRepository<RuleEntity, Long>{
 	
 	List<RuleEntity> findByClientIdAndActiveTrueOrderByPriorityAsc(String clientId);
+	
+	List<RuleEntity> findByClientIdAndActive(String clientId, boolean active);
+	
+	
+	
 
 }
