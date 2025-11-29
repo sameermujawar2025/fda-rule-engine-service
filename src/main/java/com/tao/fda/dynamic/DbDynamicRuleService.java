@@ -27,7 +27,7 @@ public class DbDynamicRuleService implements DynamicRuleService {
 
 	@Override
 	public List<RuleHit> evaluateDynamicRules(RuleEvaluationContext context) {
-		List<RuleEntity> rules = ruleRepository.findByClientIdAndActive(context.getClientId(), true);
+		List<RuleEntity> rules = ruleRepository.findByClientIdAndActiveTrueOrderByPriorityAsc(context.getClientId());
 
 		List<RuleHit> hits = new ArrayList<>();
 
@@ -69,45 +69,48 @@ public class DbDynamicRuleService implements DynamicRuleService {
 
 	private RuleHit evaluateVelocityRule(RuleEntity rule, JsonNode config, FraudFeaturesDto f) {
 
-		String featureKey = config.path("featureKey").asText();
-		int threshold = config.path("threshold").asInt();
-		int score = config.path("score").asInt();
+	    String featureKey = config.path("featureKey").asText();
+	    BigDecimal threshold = config.has("threshold") ? config.path("threshold").decimalValue() : null;
+	    int score = config.path("score").asInt();
 
-		Integer value = getIntegerFeature(f, featureKey);
-		if (value != null && value > threshold) {
-			return toHit(rule, score, featureKey + "=" + value + " > " + threshold);
-		}
-		return null;
+	    // 1️⃣ First try INTEGER velocity features
+	    Integer intVal = getIntegerFeature(f, featureKey);
+	    if (intVal != null && threshold != null) {
+	        if (BigDecimal.valueOf(intVal).compareTo(threshold) >= 0) {
+	            return toHit(rule, score, featureKey + "=" + intVal + " >= " + threshold);
+	        }
+	    }
+
+	    // 2️⃣ Then try DECIMAL velocity features (like declineRatioLast10min)
+	    BigDecimal decVal = getDecimalFeature(f, featureKey);
+	    if (decVal != null && threshold != null) {
+	        if (decVal.compareTo(threshold) >= 0) {
+	            return toHit(rule, score, featureKey + "=" + decVal + " >= " + threshold);
+	        }
+	    }
+
+	    return null;
 	}
+
 
 	// ----------------- AMOUNT_THRESHOLD -----------------
 
 	private RuleHit evaluateAmountRule(RuleEntity rule, JsonNode config, FraudFeaturesDto f) {
 
-		String featureKey = config.path("featureKey").asText(null);
-		BigDecimal threshold = config.has("threshold") ? config.path("threshold").decimalValue() : null;
-		BigDecimal multiplier = config.has("multiplier") ? config.path("multiplier").decimalValue() : null;
-		int score = config.path("score").asInt();
+	    String featureKey = config.path("featureKey").asText(null);
+	    BigDecimal threshold = config.has("threshold") ? config.path("threshold").decimalValue() : null;
+	    int score = config.path("score").asInt();
 
-		// Example 1: simple threshold, e.g. R8 High Value Block
-		if (featureKey != null && threshold != null) {
-			BigDecimal value = getDecimalFeature(f, featureKey);
-			if (value != null && value.compareTo(threshold) > 0) {
-				return toHit(rule, score, featureKey + "=" + value + " > " + threshold);
-			}
-		}
+	    if (featureKey != null && threshold != null) {
+	        BigDecimal value = getDecimalFeature(f, featureKey);
+	        if (value != null && value.compareTo(threshold) > 0) {
+	            return toHit(rule, score, featureKey + "=" + value + " > " + threshold);
+	        }
+	    }
 
-		// Example 2: z-score or ratio style (e.g. R5 Last Amount Spike using
-		// amount_zscore)
-		if ("amountZscore".equals(featureKey) && threshold != null) {
-			BigDecimal value = f.getAmountZscore();
-			if (value != null && value.compareTo(threshold) > 0) {
-				return toHit(rule, score, "amount_zscore=" + value + " > " + threshold);
-			}
-		}
-
-		return null;
+	    return null;
 	}
+
 
 	// ----------------- BOOLEAN_FLAG -----------------
 

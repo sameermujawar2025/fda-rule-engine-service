@@ -14,7 +14,7 @@ public class FraudFeaturesDto {
 	private Integer uniqueCardsOnIp;
 
 	@JsonProperty("decline_ratio_last_10min")
-	private BigDecimal declineRatioLast10min;
+    private BigDecimal declineRatioLast10min;
 
 	@JsonProperty("distance_from_last_location_km")
 	private BigDecimal distanceFromLastLocationKm;
